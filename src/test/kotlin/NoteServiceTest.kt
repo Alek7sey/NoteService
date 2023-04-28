@@ -40,6 +40,7 @@ class NoteServiceTest {
         canComment = false,
         textWiki = null
     )
+    private val comment1 = Comment(noteId = 1, id = 1, text = "Коммент_1", date = 20230424)
 
     @Before
     fun clearBeforeTest() {
@@ -48,113 +49,115 @@ class NoteServiceTest {
 
     @Test
     fun addNote() {
-        val result = NoteService.addNote(note1)
+        val result = NoteService.addElem(note1)
         kotlin.test.assertEquals(1, result)
     }
 
     @Test
-    fun createComment() {
-        NoteService.addNote(note1)
-        val result = NoteService.createComment(1, "Коммент_1", 20230424)
+    fun addComment() {
+        val result = NoteService.addElem(comment1)
         kotlin.test.assertEquals(1, result)
     }
+//    @Test
+//    fun createComment() {
+//        NoteService.addNote(note1)
+//        val result = NoteService.createComment(1, "Коммент_1", 20230424)
+//        kotlin.test.assertEquals(1, result)
+//    }
 
-    @Test(expected = NoteNotFoundException::class)
-    fun shouldThrowComment() {
-        NoteService.addNote(note1)
-        NoteService.addNote(note2)
-        NoteService.createComment(5, "Коммент_1", 20230424)
-    }
+//    @Test(expected = NoteNotFoundException::class)
+//    fun shouldThrowComment() {
+//        NoteService.addNote(note1)
+//        NoteService.addNote(note2)
+//        NoteService.createComment(5, "Коммент_1", 20230424)
+//    }
 
     @Test
     fun deleteNote() {
-        val result = NoteService.addNote(note1)
-        NoteService.addNote(note2)
+        val result = NoteService.addElem(note1)
+        NoteService.addElem(note2)
         NoteService.deleteNote(2)
         kotlin.test.assertEquals(1, result)
     }
 
-    @Test(expected = NoteNotFoundException::class)
+    @Test(expected = ElemNotFoundException::class)
     fun shouldThrowDeleteNode() {
-        NoteService.addNote(note1)
-        NoteService.addNote(note2)
+        NoteService.addElem(note1)
+        NoteService.addElem(note2)
         NoteService.deleteNote(5)
     }
 
     @Test
     fun deleteCommentTrue() {
-        NoteService.addNote(note1)
-        NoteService.createComment(1, "Коммент_1", 20230424)
+        NoteService.addElem(note1)
+        NoteService.addElem(comment1)
         val result = NoteService.deleteComment(1)
-        kotlin.test.assertTrue(result)
+        kotlin.test.assertEquals(1, result)
 
     }
 
-    @Test
+    @Test(expected = ElemNotFoundException::class)
     fun deleteCommentFalse() {
-        NoteService.addNote(note1)
-        NoteService.createComment(1, "Коммент_1", 20230424)
+        NoteService.addElem(note1)
+        NoteService.addElem(comment1)
         val result = NoteService.deleteComment(3)
-        kotlin.test.assertFalse(result)
-
     }
 
     @Test
     fun editNote() {
-        NoteService.addNote(note1)
+        NoteService.addElem(note1)
         val result = NoteService.editNote(1, "Title edit", "Text edit")
         kotlin.test.assertEquals(1, result)
     }
 
-    @Test(expected = NoteNotFoundException::class)
+    @Test(expected = ElemNotFoundException::class)
     fun shouldThrowEditNode() {
-        NoteService.addNote(note1)
-        NoteService.addNote(note2)
+        NoteService.addElem(note1)
+        NoteService.addElem(note2)
         NoteService.editNote(5, "title", "text")
     }
 
     @Test
     fun editCommentTrue() {
-        NoteService.addNote(note1)
-        NoteService.createComment(1, "Коммент_1", 20230424)
+        NoteService.addElem(note1)
+        NoteService.addElem(comment1)
         val result = NoteService.editComment(1, "Comment edit")
-        kotlin.test.assertTrue(result)
+        kotlin.test.assertEquals(1, result)
     }
 
-    @Test
+    @Test(expected = ElemNotFoundException::class)
     fun editCommentFalse() {
-        NoteService.addNote(note1)
-        NoteService.createComment(1, "Коммент_1", 20230424)
+        NoteService.addElem(note1)
+        NoteService.addElem(comment1)
         val result = NoteService.editComment(3, "Comment edit")
-        kotlin.test.assertFalse(result)
     }
 
     @Test
     fun getNoteById() {
-        NoteService.addNote(note1)
-        NoteService.addNote(note2)
+        NoteService.addElem(note1)
+        NoteService.addElem(note2)
         val result = NoteService.getNoteById(2)
         kotlin.test.assertEquals(note2, result)
     }
 
-    @Test(expected = NoteNotFoundException::class)
+    @Test(expected = ElemNotFoundException::class)
     fun shouldThrowGetNoteById() {
-        NoteService.addNote(note1)
+        NoteService.addElem(note1)
         NoteService.getNoteById(2)
     }
 
     @Test
     fun restoreCommentTrue() {
-        NoteService.addNote(note1)
-        val commentId = NoteService.createComment(1, "Коммент_1", 20230424)
+        NoteService.addElem(note1)
+        val commentId = NoteService.addElem(comment1)
         val result = NoteService.restoreComment(commentId)
         kotlin.test.assertTrue(result)
     }
 
     @Test
     fun restoreCommentFalse() {
-        NoteService.addNote(note1)
-        val commentId = NoteService.createComment(note1.id, "Коммент_1", 20230424)
+        NoteService.addElem(note1)
+        val commentId = NoteService.addElem(comment1)
         val result = NoteService.restoreComment(3)
         kotlin.test.assertFalse(result)
     }

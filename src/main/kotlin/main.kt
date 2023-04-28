@@ -1,6 +1,6 @@
 import java.lang.RuntimeException
 
-class NoteNotFoundException(message: String) : RuntimeException(message) {
+class ElemNotFoundException(message: String) : RuntimeException(message) {
 }
 
 fun main() {
@@ -42,22 +42,22 @@ fun main() {
         textWiki = null
     )
 
-    NoteService.addNote(note1)
-    NoteService.addNote(note2)
-    println(NoteService.getNotes())
-    NoteService.createComment(1, "Коммент_1", 20230424)
-    NoteService.createComment(1, "Коммент_2", 20230425)
-    println(NoteService.getNotes())
+    NoteService.addElem(note1)
+    NoteService.addElem(note2)
+    println(NoteService.getElem(null))
+    NoteService.addElem(Comment(1, 1, 20230424, "Коммент_1"))
+    //NoteService.createComment(1, "Коммент_2", 20230425)
+    println(NoteService.getElem(null))
     println()
-    println(NoteService.getComments(1))
+    println(NoteService.getElem(1))
     NoteService.deleteComment(1)
-    println(NoteService.getNotes())
+    println(NoteService.getElem(null))
     println()
     NoteService.restoreComment(1)
-    println(NoteService.getNotes())
+    println(NoteService.getElem(null))
     NoteService.deleteNote(1)
-    println(NoteService.getNotes())
-    println(NoteService.getComments(1))
+    println(NoteService.getElem(null))
+    println(NoteService.getElem(1))
 
 //    println(NoteService.getNoteById(1))
 //    NoteService.deleteNote(1)

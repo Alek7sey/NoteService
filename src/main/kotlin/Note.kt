@@ -1,6 +1,5 @@
 data class Note(
-    var id: Int,
-    //val ownerId: Int,
+    override var id: Int,
     var title: String,
     var text: String,
     var date: Int,
@@ -10,4 +9,8 @@ data class Note(
     val privacyView: String?,
     val canComment: Boolean,
     val textWiki: String?
-)
+) : ClassWithId(id)
+
+
+
+
